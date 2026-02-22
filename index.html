@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <style>
+    body { background: #111; color: white; font-family: sans-serif; padding: 20px; }
+    .grid { display: flex; flex-wrap: wrap; gap: 20px; }
+    .camera { flex: 1 1 45%; min-width: 300px; }
+    .camera h3 { margin: 0 0 6px 0; font-size: 14px; color: #aaa; }
+    video { width: 100%; border-radius: 6px; background: #000; }
+  </style>
+</head>
+<body>
+  <h1>NJTA Traffic Cameras</h1>
+  <div class="grid">
+
+    <div class="camera">
+      <h3>MM 90.0 Lakewood/Airport Rd (Lakewood Twp)</h3>
+      <video id="cam1" controls autoplay muted></video>
+    </div>
+
+    <div class="camera">
+      <h3>MM 127.8 US 9/I-287/NJ 440 (Woodbridge Twp)</h3>
+      <video id="cam2" controls autoplay muted></video>
+    </div>
+
+    <div class="camera">
+      <h3>MM 164.7 Ridgewood Ave (Paramus)</h3>
+      <video id="cam3" controls autoplay muted></video>
+    </div>
+
+    <div class="camera">
+      <h3>MM 112.3 NJ 3/Lincoln Tunnel (Secaucus)</h3>
+      <video id="cam4" controls autoplay muted></video>
+    </div>
+
+  </div>
+
+  <script>
+    const cameras = [
+      { id: 'cam1', url: 'https://wink.njta.com/200/public/hls/WF05-24A0-4D14-0622-8C30_nj.m3u8' },
+      { id: 'cam2', url: 'https://wink.njta.com/201/public/hls/WF05-24A1-4D5A-6E3B-B821_nj.m3u8' },
+      { id: 'cam3', url: 'https://wink.njta.com/202/public/hls/WF05-24A2-4D46-07E6-3742_nj.m3u8' },
+      { id: 'cam4', url: 'https://wink.njta.com/204/public/hls/WF05-24B0-46EE-0875-23D7_nj.m3u8' }
+    ];
+
+    cameras.forEach(({ id, url }) => {
+      const video = document.getElementById(id);
+      if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(video);
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        // Native HLS support (Safari)
+        video.src = url;
+      }
+    });
+  </script>
+</body>
+</html>
